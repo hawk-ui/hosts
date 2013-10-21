@@ -22,7 +22,7 @@ template "/etc/hosts" do
   owner "root"
   group "root"
 
-  source "hosts.erb"
+  source "hosts.conf.erb"
 
   variables(
     "entries" => search(
