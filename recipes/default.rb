@@ -17,6 +17,15 @@
 # limitations under the License.
 #
 
+entries = if Chef::Config[:solo]
+  node["hosts"]["entries"]
+else
+  search(
+    node["hosts"]["data_bag"],
+    "available:#{node["fqdn"]} OR available:default"
+  )
+end
+
 template "/etc/hosts" do
   mode 0644
   owner "root"
@@ -25,11 +34,6 @@ template "/etc/hosts" do
   source "hosts.conf.erb"
 
   variables(
-    "entries" => search(
-      node["hosts"]["data_bag"],
-      "available:#{node["fqdn"]}"
-    ).push(
-      node["hosts"]["entries"]
-    ).flatten
+    "entries" => entries
   )
 end
