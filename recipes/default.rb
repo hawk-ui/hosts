@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-entries = if Chef::Config[:solo]
+entries = if Chef::Config[:solo] and not node.recipes.include?("chef-solo-search")
   node["hosts"]["entries"]
 else
   search(
